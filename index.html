@@ -1,0 +1,632 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Dog Behavior Identification</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="99e30122-f763-489f-b9fa-97499aa5aa34" class="page sans"><header><h1 class="page-title">Dog Behavior Identification</h1></header><div class="page-body"><h2 id="e96d4ef2-f508-4e00-b92f-513b981dc5e9" class="">Value Creation</h2><p id="61741ffe-e9c2-417d-b906-0eca1f925dce" class="">According to Lendedu.com, one in three Fortune 500 companies offer pet healthcare insurance to employees as a voluntary benefit [<a href="https://lendedu.com/blog/more-employers-offering-pet-insurance-benefits">1</a>], indicating that pet health and wellness is of significant concern in modern society. This reality has given rise to a number of premium pet technology such as PetChatz [<a href="https://www.notion.so/Resources-d213402f821d4583a51105213bb84c54">2</a>], an interactive two-way pet camera, and Fitbark [<a href="https://www.notion.so/Resources-d213402f821d4583a51105213bb84c54">3</a>], a wearable canine health tracker.</p><p id="c887e143-71ec-4d90-80df-a9c2c401ac2f" class="">PetChatz utilizes video calling technology to enable users to check up on and remotely interact with their pets. The camera module features a video display that enables pets to view their owners through the PetChatz app, functioning much like a dedicated Zoom- or Facetime-enabled smart device. The system also features a treat dispenser as a reward mechanism.</p><p id="6ab6cd1d-0f24-416a-8cb9-ebac34248e95" class="">According to the <a href="http://petchatz.com">PetChatz.com</a> Benefits page, the PetChatz interactive webcam and reward system enables users to maintain connection with their pets throughout the day. Owners can remotely check in on their pets to encourage socialization, monitor them, and engage with them to combat pet boredom and loneliness. PetChatz claims to offer users &quot;peace of mind&quot; by enabling them to check up on their pets at any time to ensure their &quot;safety and security&quot; [<a href="https://www.notion.so/Resources-d213402f821d4583a51105213bb84c54">4</a>].</p><p id="f5ebc19b-4a7b-4d8c-9ca1-40d96ec81071" class="">Similarly, Fitbark also enables users to monitor their pets (specifically dogs) remotely to ensure their health and safety. The Fitbark is a small, lightweight device with motion-sensing capabilities that attaches to a collar or harness and connects to the user&#x27;s device via mobile app. The mobile app syncs with the Fitbark wearable and supplies users with exercise and sleep data collected from their dog&#x27;s movement throughout the day. The data is then presented in the health index feature, which alerts users to exercise or sleep abnormalities that may be indicative of canine illness [<a href="https://www.notion.so/Resources-d213402f821d4583a51105213bb84c54">5</a>].</p><p id="194835f2-fe3a-4b21-a315-c7c4f48b3f14" class="">Like Petchatz, Fitbark enables users to monitor their dog&#x27;s health and activity remotely. However, instead of using video capabilities, Fitbark uses motion data to continuously monitor trends in movement and advise users on pet health and wellness. Data collected from the collar attachment is compared to data previously collected from the same dog to identify shifts in activity that may be indicative of new health issues as well as data collected from other dogs of the same breed, which can be used to identify abnormalities indicative of ongoing health problems [<a href="https://www.notion.so/Resources-d213402f821d4583a51105213bb84c54">6</a>].</p><p id="19062866-eccb-44ff-a7ae-b1c5fa13ff31" class="">Similar to PetChatz and Fitbark, our product seeks to tap into the growing market for premium pet technology. It will create value by offering users insight into their pet&#x27;s behavior through remote monitoring using motion data, specifically by identifying movements of interest, such as lying down and jumping up. By recording and analyzing this data, the product will present users not only with an overview of their pet&#x27;s activity and movement useful for estimating their pet&#x27;s overall health, but also with specific behaviors their pet may be exhibiting for training purposes. Below, two such example scenarios are detailed.</p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="fcb252c2-bc19-4956-b210-8ee6cb17e739"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong>Example 1
+</strong>A user is training their dog not to jump up on people; the data collected is processed and used to indicate whether or not the training is effective in curbing the dog&#x27;s behavior by recording the number of times the dog jumps up per day. If the data shows the number of times the dog jumps per day is declining, the user can assume the training is effective. If the data reflects no change in the number of times the dog jumps up, the user will be alerted to the learning stagnation and try a different training strategy.</div></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="bad50b6c-5bc9-4a00-b287-6b1cc59844c0"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong>Example 2
+</strong>A user wants to reward good behavior when the doorbell is rung. If the user wants to ensure that the dog is sitting or lying down before someone opens the door, the device can be used in conjunction with an automated treat system to reward the dog for sitting or lying down after the doorbell rings. The person who rang the doorbell can then be notified that the dog is sitting or lying down and it is safe to enter the house.</div></figure><h2 id="af49420c-ae14-4da2-8229-95f08b6e11e8" class="">Motion Model</h2><h3 id="e4f65827-4823-4c59-b775-3c7f84052316" class="">Dynamics</h3><p id="c120cfcf-4970-4d62-95e9-57e96ce85d8e" class="">Data was collected using smart phone accelerometer readings recorded via the Matlab mobile app. For the duration of data collection, the phone was kept in place on the dog&#x27;s back by a pocket on the back of a sweater typically worn by the dog for warmth. The phone was positioned flat on the dog&#x27;s back with the screen facing upward, its y-axis parallel to the dog&#x27;s spine, its x-axis perpendicular to the dog&#x27;s spine, and its z-axis vertical and perpendicular to the platform of the dog&#x27;s back (see <strong>Figure 1</strong>). </p><figure id="29df9650-9294-450b-8853-611c9079f6e8" class="image"><a href="Dog%20Behavior%20Identification%2029df96509294450b8853611c9079f6e8/Component_1.png"><img style="width:315px" src="Dog%20Behavior%20Identification%2029df96509294450b8853611c9079f6e8/Component_1.png"/></a><figcaption><strong>Figure 1</strong></figcaption></figure><p id="0b25aa69-1dda-4f77-aacb-d01b43ce046d" class="">As there are three separate measurements being taken - the acceleration in the <strong>x</strong>, <strong>y</strong>, and <strong>z</strong> axes - there are three degrees of freedom in data collection. </p><h3 id="a71af630-2dcc-445e-a3eb-adbb3b1dce8d" class="">Behaviors</h3><ol id="78ee4bc8-ac0a-4640-a008-6b08e41d4b15" class="numbered-list" start="1"><li>Up</li></ol><ol id="b1036dee-6f5b-4265-beca-3a99d08123f9" class="numbered-list" start="2"><li>Down</li></ol><ol id="e050c9f4-78e2-49cd-8f96-7c2d3215457b" class="numbered-list" start="3"><li>Sit (?)</li></ol><h3 id="48c72fd2-9686-4fc4-9340-169f95095324" class="">C. Data collection</h3><h3 id="de220382-164a-4fc5-a849-a45ac5d47dc8" class="">D. Frequencies</h3><h3 id="607074c9-607f-4aaf-bc88-1394e7b8c87a" class="">E. Modification</h3><h2 id="7e56d58a-007a-4ed9-adf2-4ab8de952559" class="">Proof-of-Concept</h2><h3 id="379a6d01-b72c-43e6-8ae9-f2c448785424" class="">A. Sensors</h3><div id="e730e9ff-c5ae-48ff-b52b-2abe4d9ccd70" class="column-list"><div id="6efd8cb4-d34b-4af9-b9c1-99be57079bd1" style="width:50%" class="column"><figure id="9064855b-280a-4fa1-9d05-0b01886500df" class="image"><a href="Dog%20Behavior%20Identification%2029df96509294450b8853611c9079f6e8/Screen_Shot_2020-12-17_at_6.28.20_AM.png"><img style="width:941px" src="Dog%20Behavior%20Identification%2029df96509294450b8853611c9079f6e8/Screen_Shot_2020-12-17_at_6.28.20_AM.png"/></a></figure></div><div id="0029d53b-b1e3-4d9d-b16d-022fb34b5c05" style="width:50%" class="column"><p id="be0d0658-8c84-4118-a358-715936725f1e" class="">
+</p></div></div><p id="c58c1bb0-be77-4a68-acc2-cae0e447a042" class="">In this project, a smart phone accelerometer was used to record acceleration data in the <strong>x</strong>, <strong>y</strong>, and <strong>z</strong> directions. An accelerometer </p><h3 id="5804ec00-6a67-47ae-81c4-af33c6b4aeac" class="">B. Experiments</h3><ol id="9f0ae328-4b2c-46e9-82d7-c8c02470c4ec" class="numbered-list" start="1"><li>Up</li></ol><ol id="c63d67a2-5705-4c71-9d53-a404ebecb2cf" class="numbered-list" start="2"><li>Down</li></ol><ol id="ecb156e8-fbc5-4cf9-b290-e27e2ceecdb6" class="numbered-list" start="3"><li>Sit (?)</li></ol><figure id="62c2000f-3222-4013-86e0-eccc3651a641" class="image"><a href="Dog%20Behavior%20Identification%2029df96509294450b8853611c9079f6e8/Component_8.png"><img style="width:1054px" src="Dog%20Behavior%20Identification%2029df96509294450b8853611c9079f6e8/Component_8.png"/></a><figcaption><strong>Figure 2</strong></figcaption></figure><h3 id="e94d943e-5cf1-4616-983d-d24c13eb9360" class="">Next steps</h3><p id="b074b817-fc01-47f6-bc97-514b35e67757" class="">The next steps in developing the product would involve repeating the process detailed above on data collected from other dogs, preferably of different sizes, breeds, and temperaments. Similar filtering and frequency analysis would be performed to isolate relevant data from noise; the refined data would then be used to further train the algorithm and improve accuracy in behavior identification. The number of behaviors identified would also ideally be increased to include running and walking. This would offer the user further insight into their dog&#x27;s common behavior, energy level, health, and training progress.</p><p id="e3f6b0df-90e2-47ef-a0f1-c8a08b13677d" class="">Several design changes could be made to improve the long-term comfort of the device; namely, a more breathable vest or harness could be used for dogs in warmer climates or with longer fur, or perhaps a dedicated motion sensor could be used so that the size of the device could be reduced and possible attached to a collar for added comfort. Better still, a special collar with an embedded motion sensor could be created, resulting in a more secure fit and therefore more accurate data, as the sensor would be less inclined to bounce if the mass were more evenly distributed. This might also increase comfort, as the dog would not feel the weight of the sensor as much were the mass not concentrated so densely.</p><p id="d188a239-d0d8-4b83-9caf-31949255f4c2" class="">Additional exploration of the usage of this device might involve interactions with other specialized components to accomplish a more specific goal. For example, the device might be used along with an automated reward system so that when the sensor identifies desirable behavior under certain conditions, the dog may be rewarded (for a specific use case, refer to <strong><a href="">Example 2</a></strong><strong>)</strong>.</p><h2 id="c345073c-2ecd-4512-94c1-79d5af5b89d9" class="">IV. Algorithm Development</h2><h3 id="5769ab26-4748-4539-aed6-4d4e587a2c5d" class="">A. Fourier transforms</h3><h3 id="a7273b2a-4452-4086-84c5-28727e511d3e" class="">B. Frequency and time domains</h3><h3 id="b0e03d59-a2fd-4446-9cb9-74df2cbdd74e" class="">C. Motion model dynamics</h3><p id="5c095c9d-923c-45f0-847c-e5e12bf8bbab" class="">
+</p><figure id="58a22a43-0d09-4988-911c-0fce87be6ecb" class="link-to-page"><a href="https://www.notion.so/Raw-Outline-58a22a430d094988911c0fce87be6ecb">Raw Outline</a></figure><p id="2fd7265b-0e81-4fb5-98de-5cb57d0e9bbd" class="">
+</p></div></article></body></html>
