@@ -1,0 +1,630 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Motion Model</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="6078cd83-96e3-4e15-a0f9-e422087975a4" class="page sans"><header><h1 class="page-title">Motion Model</h1></header><div class="page-body"><h3 id="30221b71-eab7-4b5a-b7fa-93947a0d6809" class="">Dynamics and setup</h3><p id="3b47ace6-b7e6-48f5-af6a-3d1b6992a5ae" class="">Data was collected using smart phone accelerometer readings recorded via the Matlab mobile app. For the duration of data collection, the phone was kept in place on the dog&#x27;s back by a pocket stitched to the back of a sweater typically worn by the dog for warmth. The phone was positioned flat on the dog&#x27;s back with the screen facing upward, its y-axis parallel to the dog&#x27;s spine, its x-axis perpendicular to the dog&#x27;s spine, and its z-axis vertical and perpendicular to the platform of the dog&#x27;s back (see <strong>Figure 1</strong>). </p><figure id="f1b78862-32b1-47d3-8392-1406e1b1964c" class="image"><a href="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/Component_1.png"><img style="width:315px" src="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/Component_1.png"/></a><figcaption><strong>Figure 1</strong></figcaption></figure><p id="6f4b7ee2-8573-4ba5-8731-0a34a3802a5a" class="">As soon as Matlab began recording motion data, a video recording was initiated so sensor data could be correlated to the video&#x27;s time stamp and the particular motion the dog was performing upon playback. As there are three separate measurements being taken - the acceleration in the x, y, and z axes - there are three degrees of freedom in data collection. </p><h3 id="d107bcff-4873-4231-9015-254f83273e37" class="">Behaviors and motion</h3><p id="fe7d0faa-3fea-4af4-acd6-e388e1e0c158" class="">We collected data for seven different dog behaviors, which are as follows:</p><div id="6916224e-4789-4a1a-8239-8a2092e7bd94" class="column-list"><div id="9b14872f-dae2-47a1-9393-b4aca2931d26" style="width:50%" class="column"><ul id="2a334516-9d82-4be4-bed7-ee6651d8b59f" class="bulleted-list"><li><strong>Up</strong><p id="0bab1fe8-2699-4637-97db-61b7bf28d226" class="">For the &quot;Up&quot; motion, the dog jumps, lifting its front paws off the ground and propelling its posterior upward; if the dog is near another stable object or being, it uses its paws to stabilize itself against the object or being on its hind legs</p></li></ul></div><div id="c8be3f55-d117-44cd-8397-2a1808ae3896" style="width:50%" class="column"><figure id="cec8e46e-b0ae-4fc1-b44e-e9ae5a073b0c" class="image"><a href="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/up.png"><img style="width:218px" src="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/up.png"/></a><figcaption><strong>Figure 2: Up</strong></figcaption></figure></div></div><div id="5c831f23-ccf4-432a-a37e-53c172c4e6bb" class="column-list"><div id="31a922a6-75f7-48b9-82e0-9b24fa863281" style="width:50%" class="column"><ul id="c267b88f-6e2f-4b5c-8ff8-526725dbe1e3" class="bulleted-list"><li><strong>Down</strong><p id="f137c924-9f8c-4a3b-80d2-6719c059f597" class="">The &quot;down&quot; movement entails the dog lowering itself to the ground by bending its legs from either a standing or sitting position</p></li></ul></div><div id="073e4ed8-7308-4aa9-b321-710e1e956ce2" style="width:50%" class="column"><figure id="7d38bd6c-9463-4c47-8eea-3c76e4f85e7e" class="image"><a href="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/down.png"><img style="width:283px" src="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/down.png"/></a><figcaption><strong>Figure 3: Down</strong></figcaption></figure></div></div><div id="39a23df8-f365-4172-8756-4ca7be897a30" class="column-list"><div id="66bcf2bf-6442-4701-aeeb-9f2736d620da" style="width:50%" class="column"><ul id="551d9cce-2315-49ca-9f98-65bd414ad594" class="bulleted-list"><li><strong>Sit</strong><p id="f99a68ce-3fff-4f3d-b098-c3b041303d0f" class="">The &quot;sit&quot; motion involves the dog beginning in a standing position and lowering its bottom down to the floor, coming to rest on its haunches.</p></li></ul></div><div id="e03d99ca-13a8-4187-b138-add76d6f8f55" style="width:50%" class="column"><figure id="8ba974eb-fce3-4dbc-a85e-9b778e458a2d" class="image"><a href="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/sit.png"><img style="width:212px" src="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/sit.png"/></a><figcaption><strong>Figure 4: Sit</strong></figcaption></figure></div></div><div id="04d65766-c12c-4b62-aa8f-64e81d600ae5" class="column-list"><div id="f4619894-3775-4fc5-a9b1-781e4f0b84b4" style="width:50%" class="column"><ul id="88428038-ad6a-4724-a1cf-0af559960203" class="bulleted-list"><li><strong>Stand</strong><p id="95e10815-041c-4c01-9e63-4cf1b284f980" class="">&quot;Stand&quot; is performed when the dog is stationary on four extended legs with its abdomen parallel to the ground</p></li></ul></div><div id="b97ed7f3-5129-473f-b508-9c26032dd220" style="width:50%" class="column"><figure id="e3ad217c-eb42-46bf-ab49-7f90cd6aa9cd" class="image"><a href="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/stand.png"><img style="width:223px" src="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/stand.png"/></a><figcaption><strong>Figure 5: Stand</strong></figcaption></figure></div></div><div id="6c3ffb54-c4e6-4a62-b3aa-715437175c0b" class="column-list"><div id="3720bdd3-19b8-4732-8394-d7b979dbecd4" style="width:50%" class="column"><ul id="e8914ef6-4320-48e5-aeaa-0929bbf73b4d" class="bulleted-list"><li><strong>Walk</strong><p id="a1bc937f-bfb4-4f45-b11b-3960b57448a5" class="">For the &quot;walk&quot; movement the dog maintains a relaxed gait wherein at least two paws are on the ground at any given time; the dog propels itself forward often using its right front leg and back left leg (and vise-versa) synchronously</p></li></ul></div><div id="700603d4-a8b4-497a-8aed-48d5724887d9" style="width:50%" class="column"><figure id="3d26a507-13dc-4270-8b5a-630aa992a4e1" class="image"><a href="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/walk.png"><img style="width:240px" src="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/walk.png"/></a><figcaption><strong>Figure 6: Walk</strong></figcaption></figure></div></div><div id="456e1905-9668-40bc-83f4-d024214f7243" class="column-list"><div id="6950b870-fa50-4f02-914f-2b6790b90ae6" style="width:50%" class="column"><ul id="8a56ff66-a73e-4038-958b-9f3095bb1a5c" class="bulleted-list"><li><strong>Trot</strong><p id="a64d2b95-a61b-430a-a837-940296756757" class="">The &quot;trot&quot; movement requires the dog to move forward, pushing off the ground with alternating feet as is done is &quot;walk&quot; but not maintaining contact between the ground and two of its paws</p></li></ul></div><div id="28ba034e-9866-46d0-851f-95f4737f55d3" style="width:50%" class="column"><figure id="de2a0b75-8b36-4a84-9a84-06bee73cc1d0" class="image"><a href="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/trot.png"><img style="width:263px" src="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/trot.png"/></a><figcaption><strong>Figure 7: Trot</strong></figcaption></figure></div></div><div id="db34cf54-14ea-4868-8a4c-5d87d540cc62" class="column-list"><div id="6c2613a5-5f5e-4099-80c3-37197e460e64" style="width:50%" class="column"><ul id="ca833d71-5a41-41b7-be40-a6ac2e91eadb" class="bulleted-list"><li><strong>Run</strong><p id="b9210d0b-88bc-4cba-b35b-36bf015cd5f9" class="">&quot;Run&quot; is performed when the dog propels itself using its back legs synchronously to launch itself forward and its front legs to extend forward to synchronously impact the ground </p><p id="84dace3c-c355-48c4-ad8b-1d4aa5ddf809" class="">
+</p></li></ul></div><div id="7ae1d190-e856-4d2c-8e13-5094a2dc22df" style="width:50%" class="column"><figure id="e7207994-9d73-4cd5-b456-54ae80d4fcf7" class="image"><a href="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/run.png"><img style="width:246px" src="Motion%20Model%206078cd8396e34e15a0f9e422087975a4/run.png"/></a><figcaption><strong>Figure 8: Run</strong></figcaption></figure></div></div><h3 id="8dd8cb2f-577a-48ab-814c-09da94eaaaca" class=""></h3><p id="c3920f70-f442-4150-8085-ab8ba38f5960" class="">
+</p><p id="85530c53-df39-45ec-b8a4-b886de0e1229" class="">
+</p></div></article></body></html>
